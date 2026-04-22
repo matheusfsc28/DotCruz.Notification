@@ -133,6 +133,15 @@ namespace DotCruz.Notifications.Exceptions {
         }
         
         /// <summary>
+        ///   Consulta uma cadeia de caracteres localizada semelhante a The notification type is not supported.
+        /// </summary>
+        public static string NOTIFICATION_TYPE_NOT_SUPPORTED {
+            get {
+                return ResourceManager.GetString("NOTIFICATION_TYPE_NOT_SUPPORTED", resourceCulture);
+            }
+        }
+
+        /// <summary>
         ///   Consulta uma cadeia de caracteres localizada semelhante a The recipient cannot be null..
         /// </summary>
         public static string RECIPIENT_EMPTY {

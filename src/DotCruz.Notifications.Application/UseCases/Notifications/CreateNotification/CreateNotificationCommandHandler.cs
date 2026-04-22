@@ -1,5 +1,6 @@
 using DotCruz.Notifications.Domain.Interfaces;
 using DotCruz.Notifications.Domain.Interfaces.Repositories;
+using DotCruz.Notifications.Exceptions.BaseExceptions;
 using MediatR;
 
 namespace DotCruz.Notifications.Application.UseCases.Notifications.CreateNotification;
@@ -23,7 +24,7 @@ public class CreateNotificationCommandHandler : IRequestHandler<CreateNotificati
     public async Task<Guid> Handle(CreateNotificationCommand request, CancellationToken cancellationToken)
     {
         var factory = _factories.FirstOrDefault(f => f.Type == request.Type) 
-            ?? throw new InvalidOperationException($"No factory found for notification type: {request.Type}");
+            ?? throw new NotificationTypeNotSupportedException();
 
         var notification = factory.Create(
             request.ServiceId,

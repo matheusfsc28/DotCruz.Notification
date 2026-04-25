@@ -1,7 +1,9 @@
 using DotCruz.Notifications.CrossCutting.Settings;
 using DotCruz.Notifications.Domain.Interfaces;
+using DotCruz.Notifications.Domain.Interfaces.Repositories;
 using DotCruz.Notifications.Infrastructure.DataAccess;
 using DotCruz.Notifications.Infrastructure.DataAccess.Mappings;
+using DotCruz.Notifications.Infrastructure.DataAccess.Repositories;
 using DotCruz.Notifications.Infrastructure.Services.Messaging;
 using MassTransit;
 using Microsoft.Extensions.Configuration;
@@ -18,6 +20,13 @@ public static class DependencyInjection
         AddMassTransit(services, configuration);
         AddExternalServices(services, configuration);
         AddMongoDb(services, configuration);
+        AddRepositories(services);
+    }
+
+    private static void AddRepositories(IServiceCollection services)
+    {
+        services.AddScoped<INotificationRepository, NotificationRepository>();
+        services.AddScoped<ITemplateRepository, TemplateRepository>();
     }
 
     private static void AddExternalServices(IServiceCollection services, IConfiguration configuration)

@@ -12,17 +12,20 @@ public class SendNotificationCommandHandler : IRequestHandler<SendNotificationCo
 {
     private readonly INotificationRepository _notificationRepository;
     private readonly ITemplateRepository _templateRepository;
+    private readonly ITemplateEngine _templateEngine;
     private readonly IEnumerable<INotificationSenderStrategy> _senders;
     private readonly ILogger<SendNotificationCommandHandler> _logger;
 
     public SendNotificationCommandHandler(
         INotificationRepository notificationRepository,
         ITemplateRepository templateRepository,
+        ITemplateEngine templateEngine,
         IEnumerable<INotificationSenderStrategy> senders,
         ILogger<SendNotificationCommandHandler> logger)
     {
         _notificationRepository = notificationRepository;
         _templateRepository = templateRepository;
+        _templateEngine = templateEngine;
         _senders = senders;
         _logger = logger;
     }
@@ -49,7 +52,7 @@ public class SendNotificationCommandHandler : IRequestHandler<SendNotificationCo
         await ProcessTemplateAsync(notification, cancellationToken);
 
         var sender = _senders.FirstOrDefault(s => s.HandledType == notification.Type) 
-                     ?? throw new NotificationTypeNotSupportedException();
+            ?? throw new NotificationTypeNotSupportedException();
 
         await sender.SendAsync(notification, cancellationToken);
 
@@ -60,12 +63,21 @@ public class SendNotificationCommandHandler : IRequestHandler<SendNotificationCo
 
     private async Task ProcessTemplateAsync(Domain.Entities.Notifications.Notification notification, CancellationToken cancellationToken)
     {
-        if (!notification.TemplateId.HasValue) return;
+        var content = notification.Body;
 
-        var template = await _templateRepository.GetByIdAsync(notification.TemplateId.Value, cancellationToken);
-        if (template != null)
+        if (notification.TemplateId.HasValue)
         {
-            // TODO: Implement template engine substitution logic here
+            var template = await _templateRepository.GetByIdAsync(notification.TemplateId.Value, cancellationToken);
+            if (template != null)
+            {
+                content = template.Body;
+            }
+        }
+
+        if (!string.IsNullOrEmpty(content))
+        {
+            var renderedBody = _templateEngine.Render(content, notification.TemplateData);
+            notification.SetRenderedBody(renderedBody);
         }
     }
 }

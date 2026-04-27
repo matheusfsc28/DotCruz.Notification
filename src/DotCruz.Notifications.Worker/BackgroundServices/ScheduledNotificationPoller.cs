@@ -1,8 +1,6 @@
 using DotCruz.Notifications.CrossCutting.Resources;
 using DotCruz.Notifications.Domain.Interfaces;
 using DotCruz.Notifications.Domain.Interfaces.Repositories;
-using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging;
 
 namespace DotCruz.Notifications.Worker.BackgroundServices;
 

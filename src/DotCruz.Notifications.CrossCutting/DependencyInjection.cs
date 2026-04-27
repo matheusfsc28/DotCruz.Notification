@@ -10,6 +10,7 @@ public static class DependencyInjection
     {
         AddRabbitMqSettings(services, configuration);
         AddMongoDbSettings(services, configuration);
+        AddEmailSettings(services, configuration);
     }
 
     private static void AddRabbitMqSettings(IServiceCollection services, IConfiguration configuration)
@@ -23,6 +24,13 @@ public static class DependencyInjection
     {
         services.Configure<MongoDbSettings>(
             configuration.GetSection("Settings:MongoDbSettings")
+        );
+    }
+
+    private static void AddEmailSettings(IServiceCollection services, IConfiguration configuration)
+    {
+        services.Configure<EmailSettings>(
+            configuration.GetSection("Settings:EmailSettings")
         );
     }
 }

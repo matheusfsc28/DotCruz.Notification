@@ -1,4 +1,6 @@
 ﻿using DotCruz.Notifications.Application.Common.Behaviors;
+using DotCruz.Notifications.Application.Common.Services;
+using DotCruz.Notifications.Domain.Interfaces;
 using Microsoft.Extensions.DependencyInjection;
 using System.Reflection;
 
@@ -9,6 +11,7 @@ public static class DependencyInjection
     public static IServiceCollection AddApplication(this IServiceCollection services)
     {
         AddMediatR(services);
+        AddServices(services);
 
         return services;
     }
@@ -21,5 +24,10 @@ public static class DependencyInjection
                 cfg.AddOpenBehavior(typeof(NotificationFailureBehavior<,>));
             }
         );
+    }
+
+    private static void AddServices(IServiceCollection services)
+    {
+        services.AddScoped<ITemplateEngine, FluidTemplateEngine>();
     }
 }

@@ -41,6 +41,12 @@ public abstract class Notification : BaseEntity
         ScheduledFor = scheduledFor;
     }
 
+    public void SetRenderedBody(string body)
+    {
+        Body = body;
+        Validate();
+    }
+
     public void RegisterSuccess(DateTimeOffset sentAt)
     {
         Status = NotificationStatus.Sent;
@@ -51,6 +57,7 @@ public abstract class Notification : BaseEntity
     public void MarkAsProcessing()
     {
         Status = NotificationStatus.Processing;
+        Validate();
     }
 
     public void RegisterFailure(string? errorMessage)

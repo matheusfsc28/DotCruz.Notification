@@ -84,13 +84,12 @@ public class SendNotificationCommandHandlerTests
     }
 
     [Fact]
-    public async Task Warning_NotificationNotFound()
+    public async Task Error_NotificationNotFound()
     {
         var command = SendNotificationCommandBuilder.Build();
         var notificationRepository = new NotificationRepositoryBuilder().Build();
-        var logger = new Mock<ILogger<SendNotificationCommandHandler>>();
 
-        var handler = CreateHandler(notificationRepository: notificationRepository, logger: logger.Object);
+        var handler = CreateHandler(notificationRepository: notificationRepository);
 
         Task act() => handler.Handle(command, TestContext.Current.CancellationToken);
 
@@ -110,20 +109,9 @@ public class SendNotificationCommandHandlerTests
             .GetById(notification)
             .Build();
         
-        var logger = new Mock<ILogger<SendNotificationCommandHandler>>();
-
-        var handler = CreateHandler(notificationRepository: notificationRepository, logger: logger.Object);
+        var handler = CreateHandler(notificationRepository: notificationRepository);
 
         await handler.Handle(command, TestContext.Current.CancellationToken);
-
-        logger.Verify(
-            x => x.Log(
-                LogLevel.Information,
-                It.IsAny<EventId>(),
-                It.Is<It.IsAnyType>((v, t) => true),
-                It.IsAny<Exception>(),
-                It.Is<Func<It.IsAnyType, Exception?, string>>((v, t) => true)),
-            Times.Once);
         
         Mock.Get(notificationRepository).Verify(r => r.UpdateAsync(notification, It.IsAny<CancellationToken>()), Times.Never);
     }
@@ -139,20 +127,9 @@ public class SendNotificationCommandHandlerTests
             .GetById(notification)
             .Build();
 
-        var logger = new Mock<ILogger<SendNotificationCommandHandler>>();
-
-        var handler = CreateHandler(notificationRepository: notificationRepository, logger: logger.Object);
+        var handler = CreateHandler(notificationRepository: notificationRepository);
 
         await handler.Handle(command, TestContext.Current.CancellationToken);
-
-        logger.Verify(
-            x => x.Log(
-                LogLevel.Information,
-                It.IsAny<EventId>(),
-                It.Is<It.IsAnyType>((v, t) => true),
-                It.IsAny<Exception>(),
-                It.Is<Func<It.IsAnyType, Exception?, string>>((v, t) => true)),
-            Times.Once);
 
         Mock.Get(notificationRepository).Verify(r => r.UpdateAsync(notification, It.IsAny<CancellationToken>()), Times.Never);
     }

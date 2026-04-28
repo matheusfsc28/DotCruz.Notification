@@ -61,20 +61,20 @@ namespace DotCruz.Notifications.CrossCutting.Resources {
         }
         
         /// <summary>
-        ///   Consulta uma cadeia de caracteres localizada semelhante a Consuming notification {0}.
-        /// </summary>
-        public static string CONSUMING_NOTIFICATION {
-            get {
-                return ResourceManager.GetString("CONSUMING_NOTIFICATION", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Consulta uma cadeia de caracteres localizada semelhante a Consuming CreateNotificationCommand for recipient: {0}.
         /// </summary>
         public static string CONSUMING_CREATE_NOTIFICATION {
             get {
                 return ResourceManager.GetString("CONSUMING_CREATE_NOTIFICATION", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Consulta uma cadeia de caracteres localizada semelhante a Consuming notification {0}.
+        /// </summary>
+        public static string CONSUMING_NOTIFICATION {
+            get {
+                return ResourceManager.GetString("CONSUMING_NOTIFICATION", resourceCulture);
             }
         }
         
@@ -102,6 +102,15 @@ namespace DotCruz.Notifications.CrossCutting.Resources {
         public static string NOTIFICATION_ALREADY_SENT {
             get {
                 return ResourceManager.GetString("NOTIFICATION_ALREADY_SENT", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Consulta uma cadeia de caracteres localizada semelhante a Notification {0} failed definitively after all retry attempts. Registering failure..
+        /// </summary>
+        public static string NOTIFICATION_FAILED_DEFINITIVELY {
+            get {
+                return ResourceManager.GetString("NOTIFICATION_FAILED_DEFINITIVELY", resourceCulture);
             }
         }
         

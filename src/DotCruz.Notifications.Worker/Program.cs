@@ -25,11 +25,7 @@ builder.Services.AddMassTransit(busConfigurator =>
 {
     busConfigurator.AddConsumer<NotificationCreatedEventConsumer>();
     busConfigurator.AddConsumer<CreateNotificationConsumer>();
-
-    busConfigurator.UsingRabbitMq((context, cfg) =>
-    {
-        cfg.ConfigureEndpoints(context);
-    });
+    busConfigurator.AddConsumer<NotificationCreatedEventFaultConsumer>();
 });
 
 builder.Services.AddHostedService<ScheduledNotificationPoller>();

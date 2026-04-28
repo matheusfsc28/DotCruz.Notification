@@ -66,6 +66,7 @@ public abstract class Notification : BaseEntity
         _errors.Add(new NotificationError(errorDetail));
 
         RetryCount++;
+        Status = NotificationStatus.Failed;
 
         Validate();
     }

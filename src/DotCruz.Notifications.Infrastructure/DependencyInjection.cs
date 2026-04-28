@@ -53,6 +53,8 @@ public static class DependencyInjection
                     h.Password(rabbitMqSettings.Password);
                 });
 
+                cfg.UseMessageRetry(r => r.Incremental(3, TimeSpan.FromSeconds(5), TimeSpan.FromSeconds(10)));
+                
                 cfg.ConfigureEndpoints(context);
             });
         });

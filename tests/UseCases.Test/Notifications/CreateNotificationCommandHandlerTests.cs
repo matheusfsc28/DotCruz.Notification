@@ -7,6 +7,7 @@ using CommonTestUtilities.Services;
 using DotCruz.Notifications.Application.UseCases.Notifications.CreateNotification;
 using DotCruz.Notifications.Domain.Enums.Notifications;
 using DotCruz.Notifications.Domain.Interfaces;
+using DotCruz.Notifications.Exceptions;
 using DotCruz.Notifications.Exceptions.BaseExceptions;
 
 namespace UseCases.Test.Notifications;
@@ -30,7 +31,7 @@ public class CreateNotificationCommandHandlerTests
 
         var handler = CreateHandler(strategies);
 
-        var result = await handler.Handle(command, CancellationToken.None);
+        var result = await handler.Handle(command, TestContext.Current.CancellationToken);
 
         Assert.Equal(notification.Id, result);
     }
@@ -42,9 +43,11 @@ public class CreateNotificationCommandHandlerTests
         
         var handler = CreateHandler();
 
-        var act = () => handler.Handle(command, CancellationToken.None);
+        Task act() => handler.Handle(command, TestContext.Current.CancellationToken);
 
-        await Assert.ThrowsAsync<NotificationTypeNotSupportedException>(act);
+        var exception = await Assert.ThrowsAsync<NotificationTypeNotSupportedException>(act);
+
+        Assert.Contains(ResourceMessagesException.NOTIFICATION_TYPE_NOT_SUPPORTED, exception.GetErrorsMessages());
     }
 
     private static CreateNotificationCommandHandler CreateHandler(IEnumerable<INotificationFactoryStrategy>? strategies = null)

@@ -1,3 +1,4 @@
+using DotCruz.Notifications.Domain.Entities.Notifications;
 using DotCruz.Notifications.Domain.Interfaces.Repositories;
 using Moq;
 
@@ -10,6 +11,17 @@ public class NotificationRepositoryBuilder
     public NotificationRepositoryBuilder()
     {
         _repository = new Mock<INotificationRepository>();
+    }
+
+    public NotificationRepositoryBuilder GetById(Notification? notification)
+    {
+        if (notification is not null)
+        {
+            _repository.Setup(r => r.GetByIdAsync(notification.Id, It.IsAny<CancellationToken>()))
+                .ReturnsAsync(notification);
+        }
+
+        return this;
     }
 
     public INotificationRepository Build() => _repository.Object;

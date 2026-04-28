@@ -2,6 +2,7 @@ using DotCruz.Notifications.CrossCutting.Resources;
 using DotCruz.Notifications.Domain.Enums.Notifications;
 using DotCruz.Notifications.Domain.Interfaces;
 using DotCruz.Notifications.Domain.Interfaces.Repositories;
+using DotCruz.Notifications.Exceptions;
 using DotCruz.Notifications.Exceptions.BaseExceptions;
 using MediatR;
 using Microsoft.Extensions.Logging;
@@ -35,10 +36,7 @@ public class SendNotificationCommandHandler : IRequestHandler<SendNotificationCo
         var notification = await _notificationRepository.GetByIdAsync(request.NotificationId, cancellationToken);
 
         if (notification == null)
-        {
-            _logger.LogWarning(ResourceLogMessages.NOTIFICATION_NOT_FOUND, request.NotificationId);
-            return;
-        }
+            throw new NotFoundException(ResourceMessagesException.NOTIFICATION_NOT_FOUND);
 
         if (notification.Status == NotificationStatus.Sent || notification.Status == NotificationStatus.Processing)
         {
